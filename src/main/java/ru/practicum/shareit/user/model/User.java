@@ -1,7 +1,6 @@
-package ru.practicum.shareit.item.model;
+package ru.practicum.shareit.user.model;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,16 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Item {
+public class User {
     Long id;
     @NotBlank
-    @NotNull
     String name;
     @NotBlank
-    @NotNull
-    String description;
-    @NotNull
-    Boolean available;
-    Long owner;
-    Long request;
+    String email;
 }
