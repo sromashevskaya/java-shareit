@@ -13,22 +13,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
-    public static final String USER_ID_HEADER = "X-Sharer-User-Id";
+
 
     @PostMapping
-    public ItemDto addItem(@RequestHeader(USER_ID_HEADER) long userId,
+    public ItemDto addItem(@NotNull @RequestHeader("X-Sharer-User-Id") Long userId,
                            @Valid @RequestBody ItemDto itemDto) {
         return itemService.addItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader(USER_ID_HEADER) long userId, @PathVariable("itemId") Long itemId,
+    public ItemDto updateItem(@NotNull @RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable("itemId") Long itemId,
                               @RequestBody ItemDto itemDto) {
         return itemService.updateItem(userId, itemId, itemDto);
     }
 
     @GetMapping
-    public List<ItemDto> findllItemsByUserId(@RequestHeader(USER_ID_HEADER) long userId) {
+    public List<ItemDto> findllItemsByUserId(@NotNull @RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemService.findAllItemsByUserId(userId);
     }
 
