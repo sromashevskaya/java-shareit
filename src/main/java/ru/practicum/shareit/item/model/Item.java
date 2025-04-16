@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Item {
-    Long id;
+    private Long id;
     @NotBlank
     @NotNull
-    String name;
+    private String name;
     @NotBlank
     @NotNull
-    String description;
+    private String description;
     @NotNull
-    Boolean available;
-    Long owner;
-    Long request;
+    private Boolean available;
+    private Long owner;
+    private Long request;
 }
