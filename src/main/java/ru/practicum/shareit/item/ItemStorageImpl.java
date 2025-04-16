@@ -24,17 +24,17 @@ public class ItemStorageImpl implements ItemStorage {
     @Override
     public Item updateItem(Long itemId, ItemDto itemDto) {
         Item item = itemStorage.get(itemId);
-        if (item == null) {
+        if (Objects.isNull(item)) {
             throw new NoSuchElementException("Объект не найден " + itemId);
         }
 
-        if (itemDto.getName() != null) {
+        if (!Objects.isNull(itemDto.getName())) {
             item.setName(itemDto.getName());
         }
-        if (itemDto.getDescription() != null) {
+        if (!Objects.isNull(itemDto.getDescription())) {
             item.setDescription(itemDto.getDescription());
         }
-        if (itemDto.getAvailable() != null) {
+        if (!Objects.isNull(itemDto.getAvailable())) {
             item.setAvailable(itemDto.getAvailable());
         }
 
