@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +31,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
         Item existingItem = getItemOrThrow(itemId);
-        if (!existingItem.getOwner().equals(userId)) {
-            throw new NotFoundException("Объект не найден: " + itemId);
+        if (Objects.isNull(existingItem.getOwner()) || !existingItem.getOwner().equals(userId)) {
+            throw new NotFoundException("Объект с этим id не найден: " + itemId);
         }
         return itemMapper.toItemDto(itemStorage.updateItem(itemId, itemDto));
     }
