@@ -27,7 +27,7 @@ public class Comment {
     @JoinColumn(name = "item_id")
     Item item;
     @OneToOne
-    @JoinColumn(name = "creator_id")
-    User creator;
+    @JoinColumn(name = "author_id")
+    User author;
     LocalDateTime created;
 }
