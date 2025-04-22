@@ -6,14 +6,15 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.Status;
+import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.item.dto.CommentResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,14 +38,15 @@ public class ItemServiceImpl implements ItemService {
         User user = getUserOrThrow(userId);
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(user);
-        return ItemMapper.toItemDto(itemRepository.save(item));
+        Item savedItem = itemRepository.save(item);
+        return ItemMapper.toItemDto(savedItem);
     }
 
     @Override
     @Transactional
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
         Item existingItem = getItemOrThrow(itemId);
-        if (Objects.isNull(existingItem.getOwner()) || !existingItem.getOwner().equals(userId)) {
+        if (!userId.equals(existingItem.getOwner().getId())) {
             throw new NotFoundException("Объект с этим id не найден: " + itemId);
         }
 
@@ -64,7 +66,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> findAllItemsByUserId(Long userId) {
         getUserOrThrow(userId);
-        return itemRepository.findAllItemsByUserId(userId).stream()
+        return itemRepository.findAllByOwnerIdOrderById(userId).stream()
                 .map(ItemMapper::toItemDto)
                 .toList();
     }
@@ -72,7 +74,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto findItemById(Long itemId) {
         Item item = getItemOrThrow(itemId);
-        return ItemMapper.toItemDto(item);
+        ItemDto itemDto = ItemMapper.toItemDto(item);
+        itemDto.setComments(commentRepository.findAllByItem_Id(itemId).stream()
+                .map(CommentMapper::toCommentResponseDto)
+                .toList());
+        return itemDto;
     }
 
     @Override
@@ -106,23 +112,23 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Transactional
-    public CommentDto addComment(Long itemId, Long userId, CommentDto commentDto) {
+    public CommentResponseDto addComment(Long itemId, Long userId, CommentDto commentDto) {
         Item item = getItemOrThrow(itemId);
         User user = getUserOrThrow(userId);
         List<Booking> booking = bookingRepository.findByBooker_IdAndItem_IdAndEndIsBeforeAndStatus(userId,
                 itemId, LocalDateTime.now(), Status.APPROVED);
         if (booking.isEmpty()) {
-            throw new ValidationException("Запрос некорректный");
+            throw new BadRequestException("Запрос некорректный");
         }
         Comment comment = CommentMapper.toComment(commentDto, item, user);
-        return CommentMapper.toCommentDto(commentRepository.save(comment));
+        return CommentMapper.toCommentResponseDto(commentRepository.save(comment));
     }
 
     @Override
-    public List<CommentDto> findCommentsByItemId(Long itemId) {
-        return commentRepository.findAllItemsByUserId(itemId)
+    public List<CommentResponseDto> findCommentsByItemId(Long itemId) {
+        return commentRepository.findAllByItem_Id(itemId)
                 .stream()
-                .map(CommentMapper::toCommentDto)
+                .map(CommentMapper::toCommentResponseDto)
                 .collect(Collectors.toList());
     }
 }
