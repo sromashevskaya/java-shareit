@@ -1,12 +1,11 @@
 package ru.practicum.shareit.item;
 
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.UserStorage;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -14,21 +13,19 @@ import java.util.Locale;
 import java.util.Objects;
 
 @Service
-@AllArgsConstructor
-@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
+    private final ItemStorage itemStorage;
+    private final UserStorage userStorage;
     private final ItemMapper itemMapper;
 
     @Override
-    @Transactional
     public ItemDto addItem(Long userId, ItemDto itemDto) {
         User user = getUserOrThrow(userId);
+        itemDto.setOwner(user.getId());
         Item item = itemMapper.toItem(itemDto);
-        itemDto.setOwnerId(userId);
-        return itemMapper.toItemDto(itemRepository.save(itemMapper.toItem(itemDto)));
+        return itemMapper.toItemDto(itemStorage.addItem(item));
     }
 
     @Override
@@ -75,7 +72,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     private User getUserOrThrow(Long userId) {
-        return (User) userRepository.findById(userId)
+        return userStorage.findUserById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 
