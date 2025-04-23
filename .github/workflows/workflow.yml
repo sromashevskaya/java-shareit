@@ -1,0 +1,2 @@
+env:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:9988/java-shareit
