@@ -13,18 +13,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
-    Long id;
+    private Long id;
     @NotBlank
-    String name;
+    private String name;
     @NotBlank
-    String description;
+    private String description;
     @NotNull
-    Boolean available;
-    Long owner;
-    Long request;
-    BookingDto lastBooking;
-    BookingDto nextBooking;
-    List<CommentResponseDto> comments;
+    private Boolean available;
+    private Long owner;
+    private Long request;
+    private BookingDto lastBooking;
+    private BookingDto nextBooking;
+    private List<CommentResponseDto> comments;
 
     public ItemDto(Long id, String name, String description, Boolean available, Long ownerId, Long requestId) {
         this.id = id;

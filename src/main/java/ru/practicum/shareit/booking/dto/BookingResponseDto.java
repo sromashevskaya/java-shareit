@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingResponseDto {
-    Long id;
-    LocalDateTime start;
-    LocalDateTime end;
-    ItemDto item;
-    User booker;
-    Status status;
+    private Long id;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private ItemDto item;
+    private User booker;
+    private Status status;
 }
