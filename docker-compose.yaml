@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres:16.1
+    container_name: qa-15-53-live
+    ports:
+      - "9988:5432"
+    environment:
+      - POSTGRES_DB=shareit
+      - POSTGRES_USER=shareit
+      - POSTGRES_PASSWORD=shareit
