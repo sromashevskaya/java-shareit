@@ -25,15 +25,15 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingResponseDto updateBooking(
-            @PathVariable Long bookingId,
+            @PathVariable("bookingId") Long bookingId,
             @RequestHeader(USER_ID_HEADER) Long userId,
-            @RequestParam("approved") @NotNull Boolean approved) {
+            @RequestParam("approved") Boolean approved) {
         return bookingService.updateBooking(bookingId, userId, approved);
     }
 
     @GetMapping("/{bookingId}")
     public BookingResponseDto findBookingByUserId(
-            @PathVariable Long bookingId,
+            @PathVariable("bookingId") Long bookingId,
             @RequestHeader(USER_ID_HEADER) Long userId) {
         return bookingService.findBookingByUserId(bookingId, userId);
     }
@@ -41,7 +41,7 @@ public class BookingController {
     @GetMapping
     public List<BookingResponseDto> findAllBookingsByBookerId(
             @RequestHeader(USER_ID_HEADER) Long userId,
-            @RequestParam(defaultValue = "ALL") String state) {
+            @RequestParam(name = "state", defaultValue = "ALL") String state) {
         return bookingService.findAllBookingsByBookerId(userId, state);
     }
 

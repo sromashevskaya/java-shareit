@@ -51,7 +51,7 @@ public class ItemRequestServiceImpl implements ItemRequestService{
     @Override
     public List<ItemRequestResponseDto> findAllItemRequestsExceptUserId(Long userId) {
         User user = getUserOrThrow(userId);
-        List<ItemRequest> itemRequests = itemRequestRepository.findByRequestorIgnorOrder(user);
+        List<ItemRequest> itemRequests = itemRequestRepository.findByRequestorNotOrderByCreatedDesc(user);
         List<ItemRequestResponseDto> result = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {

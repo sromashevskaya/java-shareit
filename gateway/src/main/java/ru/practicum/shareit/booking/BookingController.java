@@ -24,7 +24,7 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> updateBooking(
-            @PathVariable Long bookingId,
+            @PathVariable("bookingId") Long bookingId,
             @RequestHeader(USER_ID_HEADER) Long userId,
             @RequestParam("approved") Boolean approved) {
         return bookingClient.updateBooking(bookingId, userId, approved);
@@ -32,7 +32,7 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> findBookingByUserId(
-            @PathVariable Long bookingId,
+            @PathVariable("bookingId") Long bookingId,
             @RequestHeader(USER_ID_HEADER) Long userId) {
         return bookingClient.findBookingByUserId(bookingId, userId);
     }
@@ -40,7 +40,7 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<Object> findAllBookingsByBookerId(
             @RequestHeader(USER_ID_HEADER) Long userId,
-            @RequestParam(defaultValue = "ALL") String state) {
+            @RequestParam(name = "state", defaultValue = "ALL") String state) {
         return bookingClient.findAllBookingsByBookerId(userId, state);
     }
 

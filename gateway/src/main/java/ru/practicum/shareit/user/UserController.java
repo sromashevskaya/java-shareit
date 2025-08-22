@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
-@Controller
+@RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 public class UserController {
@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> findUserById(@PathVariable Long userId) {
+    public ResponseEntity<Object> findUserById(@PathVariable("userId") Long userId) {
         return userClient.findUserById(userId);
     }
 
