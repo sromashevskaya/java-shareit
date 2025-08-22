@@ -15,19 +15,18 @@ public class ItemRequestController {
     public static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
-    public ItemRequestResponseDto addItemRequest(@NotNull @RequestHeader(USER_ID_HEADER) Long userId,
+    public ItemRequestResponseDto addItemRequest(@RequestHeader(USER_ID_HEADER) Long userId,
                                                     @RequestBody ItemRequestDto itemRequestDto) {
         return itemRequestService.addRequest(userId, itemRequestDto);
     }
 
     @GetMapping
-    public List<ItemRequestResponseDto> findAllItemRequestsByRequestorId(@NotNull @RequestHeader(USER_ID_HEADER) Long userId) {
+    public List<ItemRequestResponseDto> findAllItemRequestsByRequestorId(@RequestHeader(USER_ID_HEADER) Long userId) {
         return itemRequestService.findAllItemRequestsByRequestorId(userId);
     }
 
     @GetMapping("/all")
-    public List<ItemRequestResponseDto> findAllItemRequestsExceptUserId(@NotNull
-            @RequestHeader(USER_ID_HEADER) Long userId) {
+    public List<ItemRequestResponseDto> findAllItemRequestsExceptUserId(@RequestHeader(USER_ID_HEADER) Long userId) {
         return itemRequestService.findAllItemRequestsExceptUserId(userId);
     }
 
