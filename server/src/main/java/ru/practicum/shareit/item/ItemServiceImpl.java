@@ -12,6 +12,8 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
@@ -31,6 +33,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Override
     @Transactional
@@ -39,8 +42,26 @@ public class ItemServiceImpl implements ItemService {
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(user);
         Item savedItem = itemRepository.save(item);
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = checkRequest(itemDto.getRequestId());
+            savedItem.setRequest(itemRequest);
+        }
         return ItemMapper.toItemDto(savedItem);
     }
+
+    /*
+    public ItemDto createItem(Long userId, ItemDto itemDto) {
+        User user = checkUser(userId);
+        Item item = ItemMapper.toItem(itemDto);
+        item.setOwner(user);
+        Item saveItem = itemRepository.save(item);
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = checkRequest(itemDto.getRequestId());
+            saveItem.setRequest(itemRequest);
+        }
+        return ItemMapper.toItemDto(saveItem);
+    }
+     */
 
     @Override
     @Transactional
@@ -130,5 +151,10 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .map(CommentMapper::toCommentResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    private ItemRequest checkRequest(Long requestId) {
+        return itemRequestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("Запрос с id = " + requestId + " не найдена"));
     }
 }
