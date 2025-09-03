@@ -25,13 +25,4 @@ public class ItemDto {
     private BookingDto lastBooking;
     private BookingDto nextBooking;
     private List<CommentResponseDto> comments;
-
-//    public ItemDto(Long id, String name, String description, Boolean available, Long ownerId, Long requestId) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.available = available;
-//        this.owner = ownerId;
-//        this.requestId = requestId;
-//    }
 }

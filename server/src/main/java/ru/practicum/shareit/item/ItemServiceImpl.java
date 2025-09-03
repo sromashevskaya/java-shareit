@@ -49,20 +49,6 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(savedItem);
     }
 
-    /*
-    public ItemDto createItem(Long userId, ItemDto itemDto) {
-        User user = checkUser(userId);
-        Item item = ItemMapper.toItem(itemDto);
-        item.setOwner(user);
-        Item saveItem = itemRepository.save(item);
-        if (itemDto.getRequestId() != null) {
-            ItemRequest itemRequest = checkRequest(itemDto.getRequestId());
-            saveItem.setRequest(itemRequest);
-        }
-        return ItemMapper.toItemDto(saveItem);
-    }
-     */
-
     @Override
     @Transactional
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
