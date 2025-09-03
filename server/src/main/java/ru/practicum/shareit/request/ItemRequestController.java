@@ -15,7 +15,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ItemRequestResponseDto addItemRequest(@RequestHeader(USER_ID_HEADER) Long userId,
-                                                    @RequestBody ItemRequestDto itemRequestDto) {
+                                                 @RequestBody ItemRequestDto itemRequestDto) {
         return itemRequestService.addRequest(userId, itemRequestDto);
     }
 
@@ -31,7 +31,7 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     public ItemRequestResponseDto findItemRequestById(@PathVariable("requestId") Long requestId,
-                                                     @RequestHeader(USER_ID_HEADER) Long userId) {
+                                                      @RequestHeader(USER_ID_HEADER) Long userId) {
         return itemRequestService.findItemRequestById(requestId, userId);
     }
 }
